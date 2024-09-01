@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Pokemons } from './pokemons.entity';
+import { Pokemons } from '../entity/pokemons.entity';
 import { Battle } from './battle';
-import { BattleResults } from './battleResults.entity';
+import { BattleResults } from '../entity/battleResults.entity';
 
 @Injectable()
 export class PokemonService {
@@ -12,27 +12,19 @@ export class PokemonService {
 
     async getPokemons(): Promise<Pokemons[]> {
         const pokemons = await this.pokemonsRepository.find();
+        
+        if (pokemons.length === 0) 
+            throw new NotFoundException('No pokemons found');
+
         return pokemons;
     }
 
     async getPokemon(id: string): Promise<Pokemons> {
-        return await this.pokemonsRepository.findOne({where: {id}});
-    }
+        const pokemon = await this.pokemonsRepository.findOne({where: {id}})
 
-    // no lo use al final
-    createPokemonFromJson(jsonString: string): Pokemons {
-        const pokemonData = JSON.parse(jsonString);
-        
-        const pokemon = new Pokemons();
-        pokemon.id = pokemonData.id;
-        pokemon.name = pokemonData.name;
-        pokemon.attack = pokemonData.attack;
-        pokemon.defense = pokemonData.defense;
-        pokemon.hp = pokemonData.hp;
-        pokemon.speed = pokemonData.speed;
-        pokemon.type = pokemonData.type;
-        pokemon.imageUrl = pokemonData.imageUrl;
-    
+        if (!pokemon) 
+            throw new NotFoundException(`Pokemon not found: id ${id}`);
+
         return pokemon;
     }
 
@@ -61,12 +53,12 @@ export class PokemonService {
         return battle;
     }
 
-    private saveBattleResult(winnerId: string, loserId: string) {
+    private async saveBattleResult(winnerId: string, loserId: string): Promise<BattleResults>{
         const battleResult: BattleResults = this.battleResultsRepository.create({winnerId, loserId});
         return this.battleResultsRepository.save(battleResult);
     }
 
-    battle(userPokemon: Pokemons, opponentPokemon: Pokemons): string {
+    async battle(userPokemon: Pokemons, opponentPokemon: Pokemons): Promise<string> {
         let battle = this.assignRoles(userPokemon, opponentPokemon);
 
         battle.defender.hp -= battle.attacker.attack <= battle.defender.defense ? 1 : battle.attacker.attack - battle.defender.defense;
@@ -76,23 +68,13 @@ export class PokemonService {
             battle.defender.hp -= battle.attacker.attack <= battle.defender.defense ? 1 : battle.attacker.attack - battle.defender.defense;                
         }
 
-        this.saveBattleResult(battle.attacker.id, battle.defender.id);
+        try {
+            await this.saveBattleResult(battle.attacker.id, battle.defender.id);
+        } catch (error) {
+            console.error('Error saving battle result:', error.message);
+            throw new BadRequestException(`Pokemon id not exist: ${error.message}`);
+        }
 
         return battle.attacker.name;
     }
-
-    hello(): string {
-        return 'hello';
-    }
 }
-
-// ## Algoritmo de Batalla
-
-// Para el cálculo de la batalla, ten en consideración lo siguiente:
-
-// - El pokemon con la velocidad más alta hace el primer ataque, si son iguales, el pokemon con el ataque más alto va primero.
-// - Para calcular el daño, resta la defensa del ataque (ataque-defensa). La diferencia es el daño. Si el ataque es igual o menor que la defensa el daño es 1.
-// - El daño lo restas del HP.
-// - Los pokemon pelearán por turnos. Todos los turnos serán calculados in el mismo request. Es por esto por lo que el endpoint debe retornar la data del ganador en la misma llamada.
-// - El ganador es el que se reste el HP del enemigo a cero. 
-// - NOTA: como adicional se podría implementar el sistema de tipos, pero no es requerido.

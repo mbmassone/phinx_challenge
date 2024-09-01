@@ -28,4 +28,4 @@ WORKDIR /backend/backend
 EXPOSE 3000
 
 # Comando por defecto para correr la aplicación
-# CMD ["sh", "-c", "npm install && npm install @nestjs/typeorm typeorm sqlite3 && npm run start --watch"]
+CMD ["sh", "-c", "npm install && npm run start --watch"]

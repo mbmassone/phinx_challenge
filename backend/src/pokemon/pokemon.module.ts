@@ -1,19 +1,17 @@
 import { Module } from '@nestjs/common';
 import { PokemonController } from './pokemon.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Pokemons } from './pokemons.entity';
+import { Pokemons } from '../entity/pokemons.entity';
 import { PokemonService } from './pokemon.service';
-import { BattleResults } from './battleResults.entity';
+import { BattleResults } from '../entity/battleResults.entity';
+import { PokemonDataSource } from 'src/data-source';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(
-    {
-      type: 'sqlite',
-      database: '../bdd/bdd',
-      entities: [Pokemons, BattleResults],
-      synchronize: true,
-      logging: true
-    }), TypeOrmModule.forFeature([Pokemons, BattleResults]),
+  imports: [TypeOrmModule.forRootAsync({
+    useFactory: async () => ({
+      ...PokemonDataSource.options,
+    }),
+  }), TypeOrmModule.forFeature([Pokemons, BattleResults]),
   ],
   controllers: [PokemonController],
   providers: [PokemonService],
