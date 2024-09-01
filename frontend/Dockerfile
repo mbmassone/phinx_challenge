@@ -22,4 +22,4 @@ RUN node -v && npm -v
 WORKDIR /frontend
 
 # Comando por defecto para correr la aplicación
-CMD npm install && npm run build && npm run dev
+CMD npm install && npm run dev
