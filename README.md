@@ -1,36 +1,53 @@
 # Challenge para vacante de Dev Full Stack Ssr
 
 ## Requisitos
-- Docker
+- Docker Desktop
 
-## Levantado de la aplicacion
-1. Crear la imagen a partir del Dockerfile:
-```
-docker build -t <nombre de la imagen> .
-```
-
-2. Levantar un contenedor:
+## Configuración Backend
+1. En el directorio del proyecto del backend crear la imagen a partir del Dockerfile ejecutando el siguiente comando por consola:
 
 ```
-docker run -it --rm -p 3001:3000 -v ${PWD}/..:/backend --name <nombre del contenedor> <nombre de la imagen>
+docker build -t backend .
+```
 
+2. Levantar un contenedor de la imagen creada ejecutando el siguiente comando por consola:
+
+```
 docker run -it --rm -p 3001:3000 -v ${PWD}/..:/backend --name backend backend
+```
 
+## Configuración Frontend
+1. En el directorio del proyecto del backend crear la imagen a partir del Dockerfile ejecutando el siguiente comando por consola:
+
+```
+docker build -t frontend .
+```
+
+2. Levantar un contenedor de la imagen creada ejecutando el siguiente comando por consola:
+
+```
 docker run -it --rm -p 3000:3000 -v ${PWD}:/frontend --name frontend frontend
 ```
 
-3. 
+## Acceso a la aplicación
+Desde el navegador acceder a `localhost:3000`.
 
 
 ## Migración
-Ejecutar el siguiente comando:
+La migración se realiza automáticamente al levantar por primera vez un contenedor de docker de la imagen backend.
+
+El archivo de migración con su timestamp se generó con el siguiente comando:
 ```
 npx typeorm migration:create src/migrations/PopulatePokemonTable
 ```
 
-Modificar el archivo generado con el contenido de `src\migrations\example-PopulatePokemonTable.txt` sin cambiar el nombre de la clase que contiene el timestamp.
+Luego se modificó el archivo generado con el contenido de `src\migrations\example-PopulatePokemonTable.txt` sin cambiar el nombre de la clase que contiene el timestamp.
 
-Ejecutar el siguiente comando:
+Se ejecutó el siguiente comando para popular la tabla:
+
 ```
 npx ts-node -r tsconfig-paths/register node_modules/typeorm/cli.js migration:run -d src/data-source.ts
 ```
+
+## Base de datos
+Se utilizó una base de datos local SQLite que se encuentra en el directorio `/database` del proyecto junto al ejecutable del gestor de base por terminal para linux.
