@@ -1,0 +1,19 @@
+/* Estilos generales para todos los tamaños */
+.battleCards {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+  
+  /* Si el ancho de la ventana es de 600px o menos */
+  @media (max-width: 880px) {
+    .battleCards {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+    }
+  }

@@ -1,10 +1,8 @@
 'use client';
 
-import Image from "next/image";
-import styles from "./page.module.css";
 import PokemonSelector from "./components/PokemonSelector";
 import PokemonBattle from "./components/PokemonBattle";
-import { useState } from "react";
+import React, { useState, useEffect } from 'react'
 
 interface Pokemon {
   id: number;
@@ -18,24 +16,22 @@ interface Pokemon {
 }
 
 export default function Home() {
-  // const [selectedPokemon, setSelectedPokemon] = useState<Pokemon | null>(null);
+  const [pokemons, setPokemons] = useState<Pokemon[]>([]);
+  const [selectedPokemon, setSelectedPokemon] = useState<Pokemon | null>(null);
+  const [opponentPokemon, setOpponentPokemon] = useState<Pokemon | null>(null);
 
-  const [selectedPokemon, setSelectedPokemon] = useState<Pokemon | null>({
-    id: 1,
-    name: "Pikachu",
-    attack: 4,
-    defense: 5,
-    hp: 3,
-    speed: 6,
-    type: "Type",
-    imageUrl: "https://www.pokemon.com/static-assets/content-assets/cms2/img/pokedex/full/025.png",
-  });
+  useEffect(() => {
+    if(selectedPokemon != null)
+      setOpponentPokemon(pokemons.filter(pokemon => pokemon.id !== selectedPokemon?.id)[Math.floor(Math.random() * (pokemons.length - 1))]);
+  }, [selectedPokemon]);
 
   return (
-    <main>
-      <h1 style={{minWidth: 140}}>Battle of Pokemon</h1>
-      <PokemonSelector setSelectedPokemon={setSelectedPokemon}/>
-      <PokemonBattle pokemon={selectedPokemon}/>
+    <main style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+      <div>
+        <h1 style={{minWidth: 140, alignSelf: "flex-start"}}>Battle of Pokemon</h1>
+        <PokemonSelector setSelectedPokemon={setSelectedPokemon} pokemons={pokemons} setPokemons={setPokemons}/>
+        <PokemonBattle userPokemon={selectedPokemon} opponentPokemon={opponentPokemon}/>
+      </div>
     </main>
   );
 }
