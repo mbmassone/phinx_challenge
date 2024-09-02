@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: backend
+    container_name: backend
+    ports:
+      - "3001:3000"
+    volumes:
+      - ..:/backend
+    command: ["npm install && npx ts-node -r tsconfig-paths/register node_modules/typeorm/cli.js migration:run -d src/data-source.ts && npm run start"]
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: frontend
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/frontend
+    command: ["npm install && npm run start"]

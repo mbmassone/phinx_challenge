@@ -28,4 +28,4 @@ WORKDIR /backend/backend
 EXPOSE 3000
 
 # Comando por defecto para correr la aplicación
-CMD ["sh", "-c", "npm install && npm run start --watch"]
+# CMD npm install && npx ts-node -r tsconfig-paths/register node_modules/typeorm/cli.js migration:run -d src/data-source.ts && npm run start

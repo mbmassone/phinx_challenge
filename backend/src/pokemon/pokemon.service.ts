@@ -56,9 +56,7 @@ export class PokemonService {
   }
 
   private reverseRoles(battle: Battle): Battle {
-    const swapAux: Pokemons;
-
-    swapAux = battle.attacker;
+    const swapAux: Pokemons = battle.attacker;
     battle.attacker = battle.defender;
     battle.defender = swapAux;
 

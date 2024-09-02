@@ -4,7 +4,7 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
-export class PopulatePokemonTableXXXXXXXXXXXXX implements MigrationInterface {
+export class PopulatePokemonTable1725259652632 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         const pokemons = JSON.parse(fs.readFileSync(process.env.JSON_POKEMONS_PATH, 'utf8'));
