@@ -37,10 +37,10 @@
 
 # dotenv environment variable files
 # /backend/.env
-/backend/.env.development.local
-/backend/.env.test.local
-/backend/.env.production.local
-/backend/.env.local
+# /backend/.env.development.local
+# /backend/.env.test.local
+# /backend/.env.production.local
+# /backend/.env.local
 
 # temp directory
 /backend/.temp
