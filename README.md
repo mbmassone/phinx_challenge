@@ -15,9 +15,10 @@ docker build -t backend .
 ```
 docker run -it --rm -p 3001:3000 -v ${PWD}/..:/backend --name backend backend
 ```
+(Nota: `${PWD}` para PowerShell - `$(pwd)` para bash - `%CD%` para Windows CMD)
 
 ## Configuración Frontend
-1. En el directorio del proyecto del backend crear la imagen a partir del Dockerfile ejecutando el siguiente comando por consola:
+1. En el directorio del proyecto del frontend crear la imagen a partir del Dockerfile ejecutando el siguiente comando por consola:
 
 ```
 docker build -t frontend .
@@ -28,6 +29,7 @@ docker build -t frontend .
 ```
 docker run -it --rm -p 3000:3000 -v ${PWD}:/frontend --name frontend frontend
 ```
+(Nota: `${PWD}` para PowerShell - `$(pwd)` para bash - `%CD%` para Windows CMD)
 
 ## Acceso a la aplicación
 Desde el navegador acceder a `localhost:3000`.
