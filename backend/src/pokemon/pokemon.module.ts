@@ -7,11 +7,13 @@ import { BattleResults } from '../entity/battleResults.entity';
 import { PokemonDataSource } from 'src/data-source';
 
 @Module({
-  imports: [TypeOrmModule.forRootAsync({
-    useFactory: async () => ({
-      ...PokemonDataSource.options,
+  imports: [
+    TypeOrmModule.forRootAsync({
+      useFactory: async () => ({
+        ...PokemonDataSource.options,
+      }),
     }),
-  }), TypeOrmModule.forFeature([Pokemons, BattleResults]),
+    TypeOrmModule.forFeature([Pokemons, BattleResults]),
   ],
   controllers: [PokemonController],
   providers: [PokemonService],

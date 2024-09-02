@@ -17,7 +17,10 @@ export class PokemonController {
   }
 
   @Post('battle')
-  async battle(@Body('userPokemon') userPokemon: Pokemons, @Body('opponentPokemon') opponentPokemon: Pokemons): Promise<string> {
+  async battle(
+    @Body('userPokemon') userPokemon: Pokemons,
+    @Body('opponentPokemon') opponentPokemon: Pokemons,
+  ): Promise<string> {
     return await this.pokemonService.battle(userPokemon, opponentPokemon);
   }
 }
