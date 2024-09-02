@@ -1,4 +1,4 @@
-import { Body, Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { PokemonService } from './pokemon.service';
 import { Pokemons } from '../entity/pokemons.entity';
 
@@ -16,7 +16,7 @@ export class PokemonController {
     return await this.pokemonService.getPokemon(id);
   }
 
-  @Get('battle')
+  @Post('battle')
   async battle(@Body('userPokemon') userPokemon: Pokemons, @Body('opponentPokemon') opponentPokemon: Pokemons): Promise<string> {
     return await this.pokemonService.battle(userPokemon, opponentPokemon);
   }
